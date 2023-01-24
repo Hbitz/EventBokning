@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace EventBokning
 {
-    public partial class Form2 : Form
+    public partial class PerformerWindow : Form
     {
-        public Form2()
+        public PerformerWindow()
         {
             InitializeComponent();
         }

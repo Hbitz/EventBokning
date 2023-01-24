@@ -14,12 +14,12 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace EventBokning
 {
-    public partial class Form1 : Form
+    public partial class CustomerWindow : Form
     {
 
         MySqlConnection conn;
 
-        public Form1()
+        public CustomerWindow()
         {
             InitializeComponent();
 
@@ -53,17 +53,27 @@ namespace EventBokning
                 conn.Open();
                 sqlCmd.ExecuteReader();
                 conn.Close();
+
+                //Update table so we can see the new customer
+                selectCustomersFromDb();
+                MessageBox.Show("Insert successful");
             } catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
-            MessageBox.Show("Insert successful");
         }
-        private void selectCustomersFromDb()
+        private void selectCustomersFromDb(string searchstring = "")
         {
-            string querry = "SELECT * FROM view_customers";
+            string querry = "";
+            if (searchstring != "")
+            {
+                querry = $"CALL searchCustomerByName('{searchstring}');";
+            }
+            else
+            {
+                querry = "SELECT * FROM view_customers";
+            }
             MySqlCommand sqlCmd = new MySqlCommand(querry, conn);
-            lblOutputTest.Text = "";
             try
             {
                 conn.Open();
@@ -78,15 +88,16 @@ namespace EventBokning
                 // Förnya datan/kopplingen av readern.
                 reader = sqlCmd.ExecuteReader();
 
-                //While loop för att skriva ut hämtad data
+                /*
+                //While loop för att skriva ut hämtad data - gammal kod, endast för testning
                 while (reader.Read())
                 {
                     string name = reader["name"].ToString();
                     string email = reader["email"].ToString();
                     int age = Convert.ToInt32(reader["age"]);
 
-                    lblOutputTest.Text += $"{name} har emailen {email} och är {age} år gammal.\n";
                 }
+                */
                 conn.Close();
             }
             catch (Exception e)
@@ -117,6 +128,12 @@ namespace EventBokning
             }
         }
 
+        // When our selection in datatable/grid of customers is changed, call getSelectedRow to see if we have selected a single row or not
+        private void gridOutput_SelectionChanged(object sender, EventArgs e)
+        {
+            getSelectedRow();
+
+        }
         private void getSelectedRow()
         {
             // Validering för att kontrollera att en rad har blivit hämtad
@@ -125,23 +142,106 @@ namespace EventBokning
             // Populate second datagrid of booked events of currently selected customer via id
             int id = Convert.ToInt32(gridOutput.SelectedRows[0].Cells[0].Value);
             GetEventData(id);
+
+            // Update our textboxes from the cells in selected row. 
+            tbxName.Text = gridOutput.SelectedRows[0].Cells[1].Value.ToString();
+            tbxEmail.Text = gridOutput.SelectedRows[0].Cells[2].Value.ToString();
+            tbxAge.Text = gridOutput.SelectedRows[0].Cells[3].Value.ToString();
+
+            // Enable buttons that relies on having a row selected
+            btnUpdateCustomer.Enabled = true;
+            btnDeleteCustomer.Enabled = true;
         }
 
+        // Get all customers from db
         private void btnSelectCustomers_Click(object sender, EventArgs e)
         {
             selectCustomersFromDb();
         }
 
-        private void gridOutput_SelectionChanged(object sender, EventArgs e)
+
+        // Select for all customers in database by name with a search string
+        private void btnSearch_Click(object sender, EventArgs e)
         {
-            getSelectedRow();
+            string searchstring = tbxName.Text;
+            selectCustomersFromDb(searchstring);
+        }
+
+        // Updates a customer
+        private void btnUpdateCustomer_Click(object sender, EventArgs e)
+        {
+            if (gridOutput.SelectedRows.Count != 1) return;
+
+            // Get id and the new values
+            int id = Convert.ToInt32(gridOutput.SelectedRows[0].Cells[0].Value);
+            string name = tbxName.Text;
+            string email = tbxEmail.Text;
+            int age = Convert.ToInt32(tbxAge.Text);
+
+            string querry = $"CALL updateCustomer({id}, '{name}', '{email}', {age});";
+
+            MySqlCommand sqlCmd = new MySqlCommand(querry, conn);
+
+            try
+            {
+                conn.Open();
+                sqlCmd.ExecuteReader();
+                conn.Close();
+
+                // Uppdatera datan och meddela användaren att vi lyckades uppdatera
+                selectCustomersFromDb();
+                MessageBox.Show("Användaren har uppdateras.");
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                conn.Close();
+            }
+            /*
+            finally
+            {
+                conn.Close();
+            }*/
+
+        }
+
+        private void btnDeleteCustomer_Click(object sender, EventArgs e)
+        {
+            if (gridOutput.SelectedRows.Count != 1) return;
+
+            int id = Convert.ToInt32(gridOutput.SelectedRows[0].Cells[0].Value);
+
+            string sqlQuerry = $"CALL deleteCustomer({id});";
+
+            MySqlCommand sqlCmd = new MySqlCommand(sqlQuerry, conn);
+
+            try
+            {
+                conn.Open();
+                sqlCmd.ExecuteReader();
+                conn.Close();
+
+                //uppdatera datan
+                selectCustomersFromDb();
+                MessageBox.Show("Användaren har tagits bort.");
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        // Close this window and go to Event window
+        private void btnEventWindow_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            EventWindow eventWindow = new EventWindow();
+            eventWindow.Show();
         }
 
         private void btnPerformerWindow_Click(object sender, EventArgs e)
         {
-            Form2 PerformerWindow = new Form2();
-            this.Hide();
-            PerformerWindow.Show();
+            PerformerWindow performerWindow = new PerformerWindow();
+            this.Close();
+            performerWindow.Show();
         }
     }
 }

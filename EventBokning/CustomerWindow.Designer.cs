@@ -1,6 +1,6 @@
 ﻿namespace EventBokning
 {
-    partial class Form1
+    partial class CustomerWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -35,11 +35,14 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.btnInsertNewUser = new System.Windows.Forms.Button();
-            this.lblOutputTest = new System.Windows.Forms.Label();
             this.btnSelectCustomers = new System.Windows.Forms.Button();
             this.gridOutput = new System.Windows.Forms.DataGridView();
             this.gridEventOutput = new System.Windows.Forms.DataGridView();
             this.btnPerformerWindow = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.btnUpdateCustomer = new System.Windows.Forms.Button();
+            this.btnDeleteCustomer = new System.Windows.Forms.Button();
+            this.btnEventWindow = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.gridOutput)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridEventOutput)).BeginInit();
             this.SuspendLayout();
@@ -102,15 +105,6 @@
             this.btnInsertNewUser.UseVisualStyleBackColor = true;
             this.btnInsertNewUser.Click += new System.EventHandler(this.btnInsertNewUser_Click);
             // 
-            // lblOutputTest
-            // 
-            this.lblOutputTest.AutoSize = true;
-            this.lblOutputTest.Location = new System.Drawing.Point(231, 31);
-            this.lblOutputTest.Name = "lblOutputTest";
-            this.lblOutputTest.Size = new System.Drawing.Size(57, 13);
-            this.lblOutputTest.TabIndex = 7;
-            this.lblOutputTest.Text = "output test";
-            // 
             // btnSelectCustomers
             // 
             this.btnSelectCustomers.Location = new System.Drawing.Point(218, 157);
@@ -140,24 +134,69 @@
             // 
             // btnPerformerWindow
             // 
-            this.btnPerformerWindow.Location = new System.Drawing.Point(22, 537);
+            this.btnPerformerWindow.Location = new System.Drawing.Point(273, 537);
             this.btnPerformerWindow.Name = "btnPerformerWindow";
-            this.btnPerformerWindow.Size = new System.Drawing.Size(128, 34);
+            this.btnPerformerWindow.Size = new System.Drawing.Size(237, 51);
             this.btnPerformerWindow.TabIndex = 11;
-            this.btnPerformerWindow.Text = "PerformerWindow";
+            this.btnPerformerWindow.Text = "Performers";
             this.btnPerformerWindow.UseVisualStyleBackColor = true;
             this.btnPerformerWindow.Click += new System.EventHandler(this.btnPerformerWindow_Click);
             // 
-            // Form1
+            // btnSearch
+            // 
+            this.btnSearch.Location = new System.Drawing.Point(208, 404);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(140, 37);
+            this.btnSearch.TabIndex = 12;
+            this.btnSearch.Text = "Search for name";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // btnUpdateCustomer
+            // 
+            this.btnUpdateCustomer.Enabled = false;
+            this.btnUpdateCustomer.Location = new System.Drawing.Point(34, 404);
+            this.btnUpdateCustomer.Name = "btnUpdateCustomer";
+            this.btnUpdateCustomer.Size = new System.Drawing.Size(114, 37);
+            this.btnUpdateCustomer.TabIndex = 13;
+            this.btnUpdateCustomer.Text = "Update";
+            this.btnUpdateCustomer.UseVisualStyleBackColor = true;
+            this.btnUpdateCustomer.Click += new System.EventHandler(this.btnUpdateCustomer_Click);
+            // 
+            // btnDeleteCustomer
+            // 
+            this.btnDeleteCustomer.Enabled = false;
+            this.btnDeleteCustomer.Location = new System.Drawing.Point(388, 404);
+            this.btnDeleteCustomer.Name = "btnDeleteCustomer";
+            this.btnDeleteCustomer.Size = new System.Drawing.Size(122, 37);
+            this.btnDeleteCustomer.TabIndex = 14;
+            this.btnDeleteCustomer.Text = "Delete";
+            this.btnDeleteCustomer.UseVisualStyleBackColor = true;
+            this.btnDeleteCustomer.Click += new System.EventHandler(this.btnDeleteCustomer_Click);
+            // 
+            // btnEventWindow
+            // 
+            this.btnEventWindow.Location = new System.Drawing.Point(34, 537);
+            this.btnEventWindow.Name = "btnEventWindow";
+            this.btnEventWindow.Size = new System.Drawing.Size(216, 51);
+            this.btnEventWindow.TabIndex = 15;
+            this.btnEventWindow.Text = "Events";
+            this.btnEventWindow.UseVisualStyleBackColor = true;
+            this.btnEventWindow.Click += new System.EventHandler(this.btnEventWindow_Click);
+            // 
+            // CustomerWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1416, 600);
+            this.Controls.Add(this.btnEventWindow);
+            this.Controls.Add(this.btnDeleteCustomer);
+            this.Controls.Add(this.btnUpdateCustomer);
+            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnPerformerWindow);
             this.Controls.Add(this.gridEventOutput);
             this.Controls.Add(this.gridOutput);
             this.Controls.Add(this.btnSelectCustomers);
-            this.Controls.Add(this.lblOutputTest);
             this.Controls.Add(this.btnInsertNewUser);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -165,7 +204,7 @@
             this.Controls.Add(this.tbxAge);
             this.Controls.Add(this.tbxEmail);
             this.Controls.Add(this.tbxName);
-            this.Name = "Form1";
+            this.Name = "CustomerWindow";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.gridOutput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridEventOutput)).EndInit();
@@ -183,11 +222,14 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnInsertNewUser;
-        private System.Windows.Forms.Label lblOutputTest;
         private System.Windows.Forms.Button btnSelectCustomers;
         private System.Windows.Forms.DataGridView gridOutput;
         private System.Windows.Forms.DataGridView gridEventOutput;
         private System.Windows.Forms.Button btnPerformerWindow;
+        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Button btnUpdateCustomer;
+        private System.Windows.Forms.Button btnDeleteCustomer;
+        private System.Windows.Forms.Button btnEventWindow;
     }
 }
 

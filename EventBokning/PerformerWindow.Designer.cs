@@ -1,6 +1,6 @@
 ﻿namespace EventBokning
 {
-    partial class Form2
+    partial class PerformerWindow
     {
         /// <summary>
         /// Required designer variable.
