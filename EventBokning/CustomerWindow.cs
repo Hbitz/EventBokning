@@ -38,8 +38,44 @@ namespace EventBokning
             InsertNewCustomerToDb();
         }
 
+        private bool validateInput()
+        {
+            string name = tbxName.Text;
+            string email = tbxEmail.Text;
+            int age;
+            if (name == "")
+            {
+                MessageBox.Show("Kunden måste ha ett namn.");
+                return false;
+            };
+
+            if (email == "")
+            {
+                MessageBox.Show("Kunden måste ha en email.");
+                return false;
+            }
+
+            try
+            {
+                age = Convert.ToInt32(tbxAge.Text);
+            }
+            catch (Exception _)
+            {
+                MessageBox.Show("Ålder måste vara en siffra. Försök igen.");
+                return false;
+            }
+
+            // Returnera true om vi inte får några errors
+            return true;
+
+        }
+
+
         private void InsertNewCustomerToDb()
         {
+            // Validera all input i textboxes innan vi använder datan
+            if (validateInput() == false) return;
+
             string name = tbxName.Text;
             string email = tbxEmail.Text;
             int age = Convert.ToInt32(tbxAge.Text);
@@ -60,6 +96,7 @@ namespace EventBokning
             } catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+                conn.Close();
             }
         }
         private void selectCustomersFromDb(string searchstring = "")
@@ -85,24 +122,12 @@ namespace EventBokning
                 dataTable.Load(reader);
                 gridOutput.DataSource = dataTable;
 
-                // Förnya datan/kopplingen av readern.
-                reader = sqlCmd.ExecuteReader();
-
-                /*
-                //While loop för att skriva ut hämtad data - gammal kod, endast för testning
-                while (reader.Read())
-                {
-                    string name = reader["name"].ToString();
-                    string email = reader["email"].ToString();
-                    int age = Convert.ToInt32(reader["age"]);
-
-                }
-                */
                 conn.Close();
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+                conn.Close();
             }
         }
         private void GetEventData(int id)
@@ -125,6 +150,7 @@ namespace EventBokning
             } catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+                conn.Close();
             }
         }
 
@@ -172,6 +198,9 @@ namespace EventBokning
         {
             if (gridOutput.SelectedRows.Count != 1) return;
 
+            // Validera all input i textboxes innan vi använder datan
+            if (validateInput() == false) return;
+
             // Get id and the new values
             int id = Convert.ToInt32(gridOutput.SelectedRows[0].Cells[0].Value);
             string name = tbxName.Text;
@@ -196,12 +225,6 @@ namespace EventBokning
                 MessageBox.Show(ex.Message);
                 conn.Close();
             }
-            /*
-            finally
-            {
-                conn.Close();
-            }*/
-
         }
 
         private void btnDeleteCustomer_Click(object sender, EventArgs e)
@@ -226,6 +249,7 @@ namespace EventBokning
             } catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                conn.Close();
             }
         }
 
@@ -240,7 +264,7 @@ namespace EventBokning
         private void btnPerformerWindow_Click(object sender, EventArgs e)
         {
             PerformerWindow performerWindow = new PerformerWindow();
-            this.Close();
+            this.Hide();
             performerWindow.Show();
         }
     }

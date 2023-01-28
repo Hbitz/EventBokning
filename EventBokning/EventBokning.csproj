@@ -110,6 +110,9 @@
     <EmbeddedResource Include="EventWindow.resx">
       <DependentUpon>EventWindow.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PerformerWindow.resx">
+      <DependentUpon>PerformerWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -73,27 +73,27 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(31, 31);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.Size = new System.Drawing.Size(39, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Name";
+            this.label1.Text = "*Name";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(31, 66);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.Size = new System.Drawing.Size(36, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Email";
+            this.label2.Text = "*Email";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(31, 106);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(26, 13);
+            this.label3.Size = new System.Drawing.Size(30, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Age";
+            this.label3.Text = "*Age";
             // 
             // btnInsertNewUser
             // 
@@ -205,7 +205,7 @@
             this.Controls.Add(this.tbxEmail);
             this.Controls.Add(this.tbxName);
             this.Name = "CustomerWindow";
-            this.Text = "Form1";
+            this.Text = "CustomerWindow";
             ((System.ComponentModel.ISupportInitialize)(this.gridOutput)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridEventOutput)).EndInit();
             this.ResumeLayout(false);

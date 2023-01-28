@@ -12,6 +12,8 @@ using MySql.Data.Types;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Data.SqlTypes;
+using Org.BouncyCastle.Math.Field;
+using System.Xml.Linq;
 
 namespace EventBokning
 {
@@ -31,11 +33,62 @@ namespace EventBokning
             conn = new MySqlConnection(connString);
         }
 
-        private void btnCreateNewEvent_Click(object sender, EventArgs e)
+        // Validerar all data i våra textboxes. Returnerar false + MessageBox om något är fel, true om allt är rätt.
+        private bool validateInput()
         {
             string name = tbxName.Text;
+            int price;
+            int age_requirement;
+            if (name == "")
+            {
+                MessageBox.Show("Eventet måste ha ett namn.");
+                return false;
+            };
+
+            try
+            {
+                price = Convert.ToInt32(tbxPrice.Text);
+            }
+            catch (Exception _)
+            {
+                MessageBox.Show("Priset måste vara en siffra. Försök igen.");
+                return false;
+            }
+
+            // Validering för age_requirement, om det finns någon
+            if (tbxAgeRequirement.Text != "")
+            {
+                try
+                {
+                    age_requirement = Convert.ToInt32(tbxAgeRequirement.Text);
+                }
+                catch (Exception _)
+                {
+                    MessageBox.Show("Ålder måste vara en siffra. Försök igen.");
+                    return false;
+                }
+            }
+
+            // Returnera true om vi inte får några errors
+            return true;
+
+        }
+
+
+        // TODO - Testing around with different versions of validation.
+        // Fråga Marcus om hur nogrant valideringen ska vara.
+        private void btnCreateNewEvent_Click(object sender, EventArgs e)
+        {
+            // validateInput validerar datan och meddelar användaren om något saknas.
+            // Om inget saknas returnerar den true och vi går vidare.
+            if (validateInput() == false) return; 
+
+            // Eftersom vi vet att valideringen av input lyckades så kan vi säkert hämta och omvandla datan vi behöver.
+            string name = tbxName.Text;
             int price = Convert.ToInt32(tbxPrice.Text);
-            int age_requirement = Convert.ToInt32(tbxAgeRequirement.Text);
+            int age_requirement = 0;
+            // Set age_requirement if user input exists, otherwise leave to default
+            if (tbxAgeRequirement.Text != "") age_requirement = Convert.ToInt32(tbxAgeRequirement.Text);
 
             string query = $"CALL addEvent('{name}', '{price}', {age_requirement});";
 
@@ -63,7 +116,7 @@ namespace EventBokning
             string querry = "";
             if (searchstring != "")
             {
-                querry = $"CALL searchEventsByName('{searchstring}');";
+                querry = $"CALL searchEventByName('{searchstring}');";
             }
             else
             {
@@ -203,11 +256,17 @@ namespace EventBokning
         {
             if (gridEvents.SelectedRows.Count != 1) return;
 
-            // Get id and the new values
+
+            // validateInput validerar datan och meddelar användaren om något saknas.
+            // Om inget saknas returnerar den true och vi går vidare.
+            if (validateInput() == false) return;
+
             int id = Convert.ToInt32(gridEvents.SelectedRows[0].Cells[0].Value);
             string name = tbxName.Text;
             int price = Convert.ToInt32(tbxPrice.Text);
-            int age_requirement = Convert.ToInt32(tbxAgeRequirement.Text);
+            int age_requirement = 0;
+            // Set age_requirement if user input exists, otherwise leave to default
+            if (tbxAgeRequirement.Text != "") age_requirement = Convert.ToInt32(tbxAgeRequirement.Text);
 
             string querry = $"CALL updateEvent({id}, '{name}', '{price}', {age_requirement});";
 
@@ -338,8 +397,6 @@ namespace EventBokning
             this.Hide();
             PerformerWindow performerWindow = new PerformerWindow();
             performerWindow.Show();
-
-
         }
     }
 }
